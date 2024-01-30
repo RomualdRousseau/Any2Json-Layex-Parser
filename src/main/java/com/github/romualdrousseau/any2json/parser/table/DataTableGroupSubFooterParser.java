@@ -119,7 +119,7 @@ public class DataTableGroupSubFooterParser extends DataTableParser {
                 }
             }
         } else {
-            BaseHeader header = this.dataTable.findHeaderByIndex(cell.getColumnIndex());
+            BaseHeader header = this.dataTable.findHeaderByColumnIndex(cell.getColumnIndex());
             PivotEntry pivotEntry = null;
             if (header == null) {
                 final PivotKeyHeader foundPivot = this.dataTable.findFirstPivotHeader();
