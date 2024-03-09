@@ -23,35 +23,40 @@ import com.github.romualdrousseau.any2json.layex.TableMatcher;
 
 public class LayexTableParser implements TableParser {
 
-    public LayexTableParser(final Model model, final List<String> metaLayexes, final List<String> dataLayexes) {
-        this.model = model;
+    private final List<String> metaLayexes;
+    private final List<String> dataLayexes;
+
+    private Model model;
+    private boolean disablePivot;
+    private DataTableParserFactory dataTableParserFactory;
+    private List<TableMatcher> metaMatchers;
+    private List<TableMatcher> dataMatchers;
+
+    public LayexTableParser(final List<String> metaLayexes, final List<String> dataLayexes) {
         this.metaLayexes = metaLayexes;
         this.dataLayexes = dataLayexes;
-
         this.disablePivot = false;
         this.dataTableParserFactory = new DataTableGroupSubHeaderParserFactory();
         this.metaMatchers = metaLayexes.stream().map(Layex::new).map(Layex::compile).toList();
         this.dataMatchers = dataLayexes.stream().map(Layex::new).map(Layex::compile).toList();
-
-        // Update the model with the parser parameters
-
-        this.model.toJSON().setArray("metaLayexes", JSON.arrayOf(this.metaLayexes));
-        this.model.toJSON().setArray("dataLayexes", JSON.arrayOf(this.dataLayexes));
     }
 
     public LayexTableParser(final Model model) {
-        this.model = model;
-        this.metaLayexes = JSON.<String>streamOf(model.toJSON().getArray("metaLayexes")).toList();
-        this.dataLayexes = JSON.<String>streamOf(model.toJSON().getArray("dataLayexes")).toList();
-
-        this.disablePivot = false;
-        this.dataTableParserFactory = new DataTableGroupSubHeaderParserFactory();
-        this.metaMatchers = metaLayexes.stream().map(Layex::new).map(Layex::compile).toList();
-        this.dataMatchers = dataLayexes.stream().map(Layex::new).map(Layex::compile).toList();
+        this(
+            JSON.<String>streamOf(model.toJSON().getArray("metaLayexes")).toList(),
+            JSON.<String>streamOf(model.toJSON().getArray("dataLayexes")).toList());
+        this.updateModel(model);
     }
 
     @Override
     public void close() throws Exception {
+    }
+
+    @Override
+    public void updateModel(final Model model) {
+        this.model = model;
+        this.model.toJSON().setArray("metaLayexes", JSON.arrayOf(this.metaLayexes));
+        this.model.toJSON().setArray("dataLayexes", JSON.arrayOf(this.dataLayexes));
     }
 
     @Override
@@ -195,12 +200,4 @@ public class LayexTableParser implements TableParser {
         metaTable.setLoadCompleted(true);
         result.add(metaTable);
     }
-
-    private final Model model;
-    private final List<String> metaLayexes;
-    private final List<String> dataLayexes;
-    private boolean disablePivot;
-    private DataTableParserFactory dataTableParserFactory;
-    private List<TableMatcher> metaMatchers;
-    private List<TableMatcher> dataMatchers;
 }
