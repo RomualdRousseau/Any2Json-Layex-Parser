@@ -7,7 +7,9 @@
     <packaging>jar</packaging>
 
     <name>any2json-layex-parser</name>
-    <description>Convert any text file in Json</description>
+    <description>
+        Any2Json module to parse complex layout implementing Table Layout Regular Expression - Layex
+    </description>
     <url>https://github.com/romualdrousseau/any2json-layex-parser</url>
 
     <licenses>
@@ -370,13 +372,13 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>2.0.9</version>
+                <version>2.0.12</version>
             </dependency>
             <!-- Fix vunerabilities -->
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>3.25.1</version>
+                <version>3.25.3</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
