@@ -7,7 +7,7 @@
 ![Test](https://github.com/RomualdRousseau/Any2Json-Layex-Parser/actions/workflows/build-and-test.yml/badge.svg)
 ![Build](https://github.com/RomualdRousseau/Any2Json-Layex-Parser/actions/workflows/build-and-deploy.yml/badge.svg)
 
-Any2Json module to parse complex layout implementing [Table Layout Regular Expression - Layex](https://romualdrousseau.github.io/Any2Json-Documents/white_papers/)
+Any2Json plugin to parse complex layout implementing [Table Layout Regular Expression - Layex](https://romualdrousseau.github.io/Any2Json-Documents/white_papers/)
 
 ## Description
 

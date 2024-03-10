@@ -8,7 +8,7 @@
 
     <name>any2json-layex-parser</name>
     <description>
-        Any2Json module to parse complex layout implementing Table Layout Regular Expression - Layex
+        Any2Json plugin to parse complex layout implementing Table Layout Regular Expression - Layex
     </description>
     <url>https://github.com/romualdrousseau/any2json-layex-parser</url>
 
