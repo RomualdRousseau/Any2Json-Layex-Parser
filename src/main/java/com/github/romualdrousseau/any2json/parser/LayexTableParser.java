@@ -167,7 +167,6 @@ public class LayexTableParser implements TableParser {
 
     private void splitAllSubTables(final BaseTable table, final TableMatcher matcher, final int splitRow, final List<DataTable> result) {
         final var firstRow = table.getFirstRow() + splitRow;
-        System.out.println(firstRow + "\t" + table.getLastRow());
         if (firstRow < table.getLastRow()) {
             final var nextTable = new BaseTable(table, firstRow, table.getLastRow());
             this.parseDataTable(nextTable, matcher, 0, result);
