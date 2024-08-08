@@ -141,7 +141,9 @@ public class LayexTableParser implements TableParser {
             final int rowOffset, final boolean disablePivot, final List<DataTable> result) {
         final var dataTable = new DataTable(table, rowOffset);
         final var parser = this.dataTableParserFactory.getInstance(dataTable, disablePivot);
-        matcher.match(new TableLexer(table, rowOffset), parser);
+        if(!matcher.match(new TableLexer(table, rowOffset), parser)) {
+            return;
+        }
 
         if (parser.getSplitRows().size() > 0) {
             dataTable.adjustLastRow(table.getFirstRow() + parser.getSplitRows().get(0) - 1);
@@ -168,7 +170,9 @@ public class LayexTableParser implements TableParser {
             final List<MetaTable> result) {
         final MetaTable metaTable = new MetaTable(table);
         final var parser = new MetaTableParser(metaTable);
-        matcher.match(new TableLexer(table, 0), parser);
+        if(!matcher.match(new TableLexer(table, 0), parser)) {
+            return;
+        }
         result.add(metaTable);
     }
 
