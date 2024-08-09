@@ -22,10 +22,14 @@ import com.github.romualdrousseau.any2json.layex.TableMatcher;
 
 public class LayexTableParser implements TableParser {
 
+    public static final String GROUP_WITH_SUBHEADER_OPTION = "DataTableGroupSubHeaderParserFactory";
+    public static final String GROUP_WITH_SUBFOOTER_OPTION = "DataTableGroupSubFooterParserFactory";
+
     private final List<String> metaLayexes;
     private final List<String> dataLayexes;
 
     private Model model;
+    private String options;
     private DataTableParserFactory dataTableParserFactory;
     private List<TableMatcher> metaMatchers;
     private List<TableMatcher> dataMatchers;
@@ -33,6 +37,7 @@ public class LayexTableParser implements TableParser {
     public LayexTableParser(final List<String> metaLayexes, final List<String> dataLayexes) {
         this.metaLayexes = metaLayexes;
         this.dataLayexes = dataLayexes;
+        this.options = LayexTableParser.GROUP_WITH_SUBHEADER_OPTION;
         this.dataTableParserFactory = new DataTableGroupSubHeaderParserFactory();
         this.metaMatchers = metaLayexes.stream().map(Layex::new).map(Layex::compile).toList();
         this.dataMatchers = dataLayexes.stream().map(Layex::new).map(Layex::compile).toList();
@@ -42,7 +47,7 @@ public class LayexTableParser implements TableParser {
         this(
                 JSON.<String>streamOf(model.toJSON().getArray("metaLayexes")).toList(),
                 JSON.<String>streamOf(model.toJSON().getArray("dataLayexes")).toList());
-        this.updateModel(model);
+        this.setModel(model);
     }
 
     @Override
@@ -50,21 +55,34 @@ public class LayexTableParser implements TableParser {
     }
 
     @Override
-    public void updateModel(final Model model) {
-        this.model = model;
-        this.model.toJSON().setArray("metaLayexes", JSON.arrayOf(this.metaLayexes));
-        this.model.toJSON().setArray("dataLayexes", JSON.arrayOf(this.dataLayexes));
+    public Model getModel() {
+        return this.model;
     }
 
     @Override
-    public void setParserOptions(String options) {
-        if (options.equals("DataTableGroupSubHeaderParserFactory")) {
+    public TableParser setModel(final Model model) {
+        this.model = model;
+        this.model.toJSON().setArray("metaLayexes", JSON.arrayOf(this.metaLayexes));
+        this.model.toJSON().setArray("dataLayexes", JSON.arrayOf(this.dataLayexes));
+        return this;
+    }
+
+    @Override
+    public String getParserOptions() {
+        return this.options;
+    }
+
+    @Override
+    public TableParser setParserOptions(String options) {
+        this.options = options;
+        if (options.equals(LayexTableParser.GROUP_WITH_SUBHEADER_OPTION)) {
             this.dataTableParserFactory = new DataTableGroupSubHeaderParserFactory();
-        } else if (options.equals("DataTableGroupSubFooterParserFactory")) {
+        } else if (options.equals(LayexTableParser.GROUP_WITH_SUBFOOTER_OPTION)) {
             this.dataTableParserFactory = new DataTableGroupSubFooterParserFactory();
         } else { // Default to DataTableGroupSubHeaderParserFactory
             this.dataTableParserFactory = new DataTableGroupSubHeaderParserFactory();
         }
+        return this;
     }
 
     @Override
